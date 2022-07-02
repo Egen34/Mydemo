@@ -1,3 +1,6 @@
+import java.io.InputStream;
+import java.util.Scanner;
+
 public class Main {
     public static boolean isNumeric(String str) {
         try {
@@ -20,19 +23,30 @@ public class Main {
         return res;
     }
     public static String changer(String str){
-        String[] res={"I","II","III","IV","V","VI","VII","VIII","IX","X","XI","XII","XIII","XIV","XV","XVI","XVII","XVIII","XIX","XX"};
-        if (isNumeric(str))
-            return res[Integer.parseInt(str)-1];
-        for (int i = 0; i < res.length; i++)
-            if (str.equals(res[i]))
-                return ""+(i+1);
-        return "";
+        String res = "";
+        if (isNumeric(str)){
+            String[][] o={
+                    {"","I","II","III","IV","V","VI","VII","VIII","IX"},
+                    {"","X","XX","XXX","XL","L","LX","LXX","LXXX","XC"},
+                    {"","C","CC","CCC","CD","D","DC","DCC","DCCC","CM"}
+            };
+            for (int i =str.length()-1; i>=0; i--) {
+                res+=o[i][Integer.parseInt(str.split("")[str.length()-i-1])];
+            }
+        }else{
+            for (int i = 1; i <999 ; i++) {
+                res = changer(Integer.toString(i));
+                if (str.equals(res))
+                    return Integer.toString(i);
+            }
+        }
+        return res;
     }
     public static String calc(String input){
         String[] st=input.split(" ");
         if (st.length>3)
             return "throws Exception //т.к. формат математической операции не удовлетворяет заданию - два операнда и один оператор (+, -, /, *)";
-        if (st.length==1)
+        if (st.length<3)
             return "throws Exception //т.к. строка не является математической операцией";
         if (isNumeric(st[0])==isNumeric(st[2])) {
             if (isNumeric(st[0])) {
@@ -50,11 +64,8 @@ public class Main {
 
     }
     public static void main(String[] args) {
-        System.out.println(calc("1 + 2"));
-        System.out.println(calc("VI / III"));
-        System.out.println(calc("I - II"));
-        System.out.println(calc("I + 1"));
-        System.out.println(calc("1"));
-        System.out.println(calc("1 + 2 + 3"));
+        Scanner s=new Scanner(System.in);
+
+        System.out.println(calc(s.nextLine()));
     }
 }
